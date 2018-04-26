@@ -1,0 +1,18 @@
+{
+  "name": "learn-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev-run": "node index.js"
+  },
+  "author": "Nag",
+  "license": "ISC",
+  "dependencies": {
+    "ibm-apr-greet": "^1.0.0",
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0"
+  }
+}
