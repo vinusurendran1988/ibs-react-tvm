@@ -1,0 +1,16 @@
+
+in javascript-lang ,
+
+    => on event , event-handler always executes async
+
+------------------------------------------------------
+
+Async APIs
+----------
+
+    in ES6, 
+    
+      - Promise API    
+
+            ==> to execute function async
+------------------------------------------------------      

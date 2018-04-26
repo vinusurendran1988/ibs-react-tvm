@@ -1,0 +1,65 @@
+
+ref : http://crockford.com/
+
+-------------------------------------------------------------
+JS-intro : 
+
+    -> scripting-lang for web-pages in browser-envi
+    +
+    -> server-side lang on Node.js ( Javascript runtime )
+    -> Hybrid Mobile Native application
+-------------------------------------------------------------
+
+JS-features
+
+    -> FP + OOP
+    -> dynamic
+
+    -> all IO operations are Non-blocking-IO    
+    -> single-threaded process, but we can execute concurrent action while IO happening
+
+-------------------------------------------------------------  
+
+Javascript lang is based on 'ECMAScript spec '  
+
+  latest : ES7
+
+-------------------------------------------------------------
+
+how to run .js-program ?
+
+  ==> using Javascript-engine/runtime
+
+  browser-envi
+
+    1. chrome  ==> (v8->c++)
+    2. firefox ==> (rhino -> java)
+    3. IE/Edge ==> chakra
+    4. Safari  ==> nitro
+    ........
+
+  other-eni
+
+    1. Node.js ==> (v8)
+    2. JVM     ==> (nashorn)
+    3. Apache couchDB
+    4. MongoDB
+    5. Adobe
+    ..........
+
+
+-------------------------------------------------------------
+
+"Hello World!"
+
+-------------------------------------------------------------
+
+
+Topics
+-------
+
+  1. data-types
+  2. scopes / execution-context
+  3. FP in Javascript
+  4. 'this' keyword / Function-binding
+  5. prototypes
