@@ -11,8 +11,9 @@ class ActionButton extends Component {
         }
     }
     handleBtnClick() {
-        this.setState({ count: this.state.count + 1 }, () => {
-            this.props.onAction();
+        let value = this.props.value;
+        this.setState({ count: this.state.count + Number.parseInt(value) }, () => {
+            this.props.onAction(Number.parseInt(value));
         })
     }
     render() {
