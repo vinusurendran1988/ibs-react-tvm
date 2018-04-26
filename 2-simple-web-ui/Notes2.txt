@@ -1,0 +1,41 @@
+
+
+
+HTML components/elements
+--------------------------
+
+every html-tag/component is an instance of HTMLXXXElement class
+
+
+
+ e.g
+ <input />  instanceof 'HTMLInputElement' class
+
+
+ i.e
+  HTMLInputElement  ==> class
+  <input />         ==> instance
+
+--------------------------------------------------
+
+
+html-component/element
+
+    - props/attributes  ( ==> data given by parent-component)
+    - state             ( ==> comp's own data)
+
+        e.g input-eleemnt
+
+            state : e.g 'value'
+
+         imp-note : when component's state change, will re-render
+
+----------------------------------------------------        
+
+
+
+
+
+
+
+
