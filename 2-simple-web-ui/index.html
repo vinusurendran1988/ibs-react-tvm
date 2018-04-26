@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>index</title>
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+</head>
+
+<body class="container">
+
+    <hr>
+    <h1> HTML component(s)</h1>
+    <hr/>
+
+    <div id="box1" class="alert alert-info">
+        <input id="inp" type="number" max="100" onchange="handleChange()" />
+        <hr/>
+        <span id="spanEle" class="badge badge-primary">0</span>
+    </div>
+
+    <script>
+        let inpEle = document.getElementById('inp');
+        let spanEle = document.getElementById('spanEle');
+        let num = 0;
+        setInterval(() => {
+            num++;
+            inpEle.value = num;
+            inpEle.dispatchEvent(new Event('change'));
+        }, 2000);
+        function handleChange() {
+            spanEle.innerText = num;
+        }
+    </script>
+
+</body>
+
+</html>
