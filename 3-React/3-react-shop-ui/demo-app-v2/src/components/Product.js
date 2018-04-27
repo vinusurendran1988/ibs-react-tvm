@@ -11,12 +11,16 @@ class Product extends Component {
             currentTab: 1,
             reviews: [
                 { stars: 5, author: 'who@email.com', body: 'sample review' },
-                { stars: 2, author: 'who@email.com', body: 'sample review' }
             ]
         };
     }
     changeTab(tabIndex) {
         this.setState({ currentTab: tabIndex })
+    }
+    handleReview(review) {
+        let { reviews } = this.state;
+        reviews = reviews.concat(review);
+        this.setState({ reviews });
     }
     renderBuyBtn(product) {
         if (product.canBuy) {
@@ -46,7 +50,7 @@ class Product extends Component {
                     <div>
                         {this.renderReviews()}
                         <hr />
-                        <ReviewForm />
+                        <ReviewForm onNewReview={(review) => { this.handleReview(review) }} />
                     </div>
                 )
                 break;
@@ -78,7 +82,7 @@ class Product extends Component {
                                     <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="/#">Specification</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="#">Reviews</a>
+                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="/#">Reviews</a>
                                 </li>
                             </ul>
                             {this.renderTabPanel(product)}
