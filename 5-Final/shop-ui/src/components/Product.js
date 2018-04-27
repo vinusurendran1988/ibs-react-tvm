@@ -3,28 +3,42 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Review from './Review';
 import ReviewForm from './ReviewForm';
+import store from '../store';
+import { loadReviews, addNewReview } from '../actions/reviews';
+import { buy } from '../actions/cart';
 
 class Product extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentTab: 1,
-            reviews: [
-                { stars: 5, author: 'who@email.com', body: 'sample review' },
-            ]
+            reviews: []
         };
+    } 
+    componentDidMount() {
+        let { product } = this.props;
+        store.subscribe(() => {
+            let state = store.getState();
+            let reviews = state.reviews[product.id]
+            reviews = reviews || [];
+            this.setState({ reviews });
+        });
     }
     changeTab(tabIndex) {
-        this.setState({ currentTab: tabIndex })
+        this.setState({ currentTab: tabIndex }, () => {
+            if (tabIndex === 3) {
+                let { product } = this.props;
+                store.dispatch(loadReviews(product.id));
+            }
+        })
     }
     handleReview(review) {
-        let { reviews } = this.state;
-        reviews = reviews.concat(review);
-        this.setState({ reviews });
+        let { product } = this.props;
+        store.dispatch(addNewReview(product.id, review));
     }
     handleBuyBtnClick() {
-        let { product, onBuy } = this.props;
-        onBuy(product);
+        let { product } = this.props;
+        store.dispatch(buy(product, 1));
     }
     renderBuyBtn(product) {
         if (product.canBuy) {
@@ -80,13 +94,13 @@ class Product extends Component {
                             <hr />
                             <ul className="nav nav-tabs">
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(1) }} className={classNames('nav-link', { active: currentTab === 1 })} href="/#">Description</a>
+                                    <a onClick={() => { this.changeTab(1) }} className={classNames('nav-link', { active: currentTab === 1 })} href="#">Description</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="/#">Specification</a>
+                                    <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="#">Specification</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="/#">Reviews</a>
+                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="#">Reviews</a>
                                 </li>
                             </ul>
                             {this.renderTabPanel(product)}

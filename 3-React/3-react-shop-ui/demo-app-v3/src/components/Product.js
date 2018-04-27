@@ -9,18 +9,38 @@ class Product extends Component {
         super(props);
         this.state = {
             currentTab: 1,
-            reviews: [
-                { stars: 5, author: 'who@email.com', body: 'sample review' },
-            ]
+            reviews: []
         };
     }
     changeTab(tabIndex) {
-        this.setState({ currentTab: tabIndex })
+        this.setState({ currentTab: tabIndex }, () => {
+            if (tabIndex === 3) {
+                let { product } = this.props;
+                let apiUrl = `http://localhost:8080/api/products/${product.id}/reviews`;
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(result => {
+                        let { reviews } = this.state;
+                        reviews = [...reviews, ...result];
+                        this.setState({ reviews });
+                    });
+            }
+        })
     }
     handleReview(review) {
-        let { reviews } = this.state;
-        reviews = reviews.concat(review);
-        this.setState({ reviews });
+        let { product } = this.props;
+        let apiUrl = `http://localhost:8080/api/products/${product.id}/reviews`;
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(review)
+        })
+            .then(response => response.json())
+            .then(result => {
+                let { reviews } = this.state;
+                reviews = [...reviews, result];
+                this.setState({ reviews });
+            });
     }
     handleBuyBtnClick() {
         let { product, onBuy } = this.props;
@@ -80,13 +100,13 @@ class Product extends Component {
                             <hr />
                             <ul className="nav nav-tabs">
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(1) }} className={classNames('nav-link', { active: currentTab === 1 })} href="/#">Description</a>
+                                    <a onClick={() => { this.changeTab(1) }} className={classNames('nav-link', { active: currentTab === 1 })} href="#">Description</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="/#">Specification</a>
+                                    <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="#">Specification</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="/#">Reviews</a>
+                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="#">Reviews</a>
                                 </li>
                             </ul>
                             {this.renderTabPanel(product)}

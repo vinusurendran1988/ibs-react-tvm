@@ -3,28 +3,33 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Review from './Review';
 import ReviewForm from './ReviewForm';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { loadReviews, addNewReview } from '../actions/reviews';
+import { buy } from '../actions/cart';
 
 class Product extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentTab: 1,
-            reviews: [
-                { stars: 5, author: 'who@email.com', body: 'sample review' },
-            ]
         };
     }
     changeTab(tabIndex) {
-        this.setState({ currentTab: tabIndex })
+        this.setState({ currentTab: tabIndex }, () => {
+            if (tabIndex === 3) {
+                let { product, actions } = this.props;
+                actions.loadReviews(product.id);
+            }
+        })
     }
     handleReview(review) {
-        let { reviews } = this.state;
-        reviews = reviews.concat(review);
-        this.setState({ reviews });
+        let { product, actions } = this.props;
+        actions.addNewReview(product.id, review);
     }
     handleBuyBtnClick() {
-        let { product, onBuy } = this.props;
-        onBuy(product);
+        let { product, actions } = this.props;
+        actions.buy(product, 1);
     }
     renderBuyBtn(product) {
         if (product.canBuy) {
@@ -34,7 +39,7 @@ class Product extends Component {
         }
     }
     renderReviews() {
-        let { reviews } = this.state;
+        let { reviews } = this.props;
         return reviews.map((review, idx) => {
             return <Review review={review} key={idx} />
         });
@@ -52,6 +57,7 @@ class Product extends Component {
             case 3:
                 panel = (
                     <div>
+                        {this.props.status.message}
                         {this.renderReviews()}
                         <hr />
                         <ReviewForm onNewReview={(review) => { this.handleReview(review) }} />
@@ -80,13 +86,13 @@ class Product extends Component {
                             <hr />
                             <ul className="nav nav-tabs">
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(1) }} className={classNames('nav-link', { active: currentTab === 1 })} href="/#">Description</a>
+                                    <a onClick={() => { this.changeTab(1) }} className={classNames('nav-link', { active: currentTab === 1 })} href="#">Description</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="/#">Specification</a>
+                                    <a onClick={() => { this.changeTab(2) }} className={classNames('nav-link', { active: currentTab === 2 })} href="#">Specification</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="/#">Reviews</a>
+                                    <a onClick={() => { this.changeTab(3) }} className={classNames('nav-link', { active: currentTab === 3 })} href="#">Reviews</a>
                                 </li>
                             </ul>
                             {this.renderTabPanel(product)}
@@ -101,4 +107,23 @@ Product.propTypes = {
     product: PropTypes.object
 }
 
-export default Product;
+
+
+function mapStateToProps(state, props) {
+    let { product } = props;
+    let reviews = state.reviews[product.id];
+    reviews = reviews || [];
+    return {
+        reviews,
+        status: state.status
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    let actions = { loadReviews, addNewReview, buy }
+    return {
+        actions: bindActionCreators(actions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Product);
